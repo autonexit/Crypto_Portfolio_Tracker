@@ -1,8 +1,8 @@
 # Crypto Portfolio Tracker V2.0 — راهنمای استفاده
 
-
+<a href="https://autonexit.com" target="_blank">
     <img alt="تصویری از نرم افزار" src="V2/demo.png"/>
-
+</a>
 
 ## معرفی برنامه
 
