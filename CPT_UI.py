@@ -11,9 +11,14 @@ from PySide6.QtCore import QFile
 
 today = date.today()
 
+# ✅ CHANGE: API key will be provided by user from UI (objectName: apiEntry)
+API_KEY_coinmarket = ""  # ✅ CHANGE
+
+
 # Coinmarket API
 def Coinmarket(Crypto_Name):
-    API_KEY_coinmarket = "07af61ff-8f34-47ea-8f5e-94f161861357"
+    # ✅ CHANGE: use the global API key (set from UI)
+    global API_KEY_coinmarket
 
     url = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest"
     params = {"symbol": Crypto_Name, "convert": "USD"}
@@ -29,17 +34,18 @@ def Coinmarket(Crypto_Name):
         return 0.0
 
 
-BTC_Price = Coinmarket('BTC')
-ton_price = Coinmarket('TON')
-
 USDT_Price_Now = 0.0
 window = None
+
+# ✅ CHANGE: keep prices global because calculate_prog uses them
+BTC_Price = 0.0  # ✅ CHANGE
+ton_price = 0.0  # ✅ CHANGE
 
 
 def calculate_prog():
     global USDT_Price_Now
 
-    # ===== Read from Qt widgets (NEW objectNames) =====
+    # ===== Read from Qt widgets =====
     USDT_Price_Now = float(window.usdtEntry.text())
     Crypto_User = float(window.amountEntry.text())
 
@@ -98,7 +104,6 @@ def calculate_prog():
         profit = Price_Now - User_Buy_Price
         return profit, user_symbol_Get, Price_Now, duration.days
 
-
     # ===== Output to Qt TextEdit =====
     window.resultBox.clear()
 
@@ -126,21 +131,38 @@ def load_ui(ui_path):
 
 
 def main():
-    global window
+    global window, API_KEY_coinmarket, BTC_Price, ton_price  # ✅ CHANGE
 
     app = QApplication([])
 
     ui_path = os.path.join(os.path.dirname(__file__), "UI.ui")
     window = load_ui(ui_path)
 
-    # ===== Connect Button (NEW objectName) =====
+    # ===== Required widgets =====
     if not hasattr(window, "calcBtn"):
         QMessageBox.critical(window, "Error", "calcBtn not found (objectName mismatch).")
         return
-
     if not hasattr(window, "resultBox"):
         QMessageBox.critical(window, "Error", "resultBox not found.")
         return
+
+    # ✅ CHANGE: API key input must exist in UI (QLineEdit objectName: apiEntry)
+    if not hasattr(window, "apiEntry"):
+        QMessageBox.critical(
+            window,
+            "Error",
+            "apiEntry not found. In Qt Designer add a LineEdit and set objectName = apiEntry"
+        )
+        return
+
+    # ✅ CHANGE: read API key from UI
+    API_KEY_coinmarket = (window.apiEntry.text() or "").strip()
+    if not API_KEY_coinmarket:
+        QMessageBox.warning(window, "Warning", "API Key is empty. Prices will be 0.0")
+
+    # ✅ CHANGE: now we can fetch prices using user's API key
+    BTC_Price = Coinmarket('BTC')
+    ton_price = Coinmarket('TON')
 
     window.calcBtn.clicked.connect(calculate_prog)
 

@@ -69,8 +69,8 @@
    <widget class="QPushButton" name="calcBtn">
     <property name="geometry">
      <rect>
-      <x>380</x>
-      <y>190</y>
+      <x>310</x>
+      <y>30</y>
       <width>93</width>
       <height>28</height>
      </rect>
@@ -89,6 +89,19 @@
      </rect>
     </property>
    </widget>
+   <widget class="QLineEdit" name="apiEntry">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>210</y>
+      <width>351</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>UDs price of t</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -96,7 +109,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
