@@ -136,4 +136,7 @@ prices.csv
 
 ---
 
+## لینک دانلود
+https://github.com/autonexit/Crypto_Portfolio_Tracker/releases/download/Final/APP_Final_CPT.zip
+
 © Crypto Portfolio Tracker
