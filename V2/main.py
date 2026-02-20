@@ -24,7 +24,8 @@ class Main:
         self.ui.resultBox.setText("")
 
         # اجرای خودکار بعد از بالا آمدن پنجره (تغییر کم ولی مهم)
-        QTimer.singleShot(0, self.beginning)  # <-- اضافه شد
+        QTimer.singleShot(0, self.beginning)
+        # <-- اضافه شد
 
     def Coinmarket(self, Crypto_Name):  # <-- self اضافه شد
 
@@ -45,11 +46,21 @@ class Main:
         data = response.json()
         return data["data"][Crypto_Name]["quote"]["USD"]["price"]
 
+    def credits_left(self):
+        url = "https://pro-api.coinmarketcap.com/v1/key/info"
+        headers = {"X-CMC_PRO_API_KEY": self.api_txt}
+
+        r = requests.get(url, headers=headers, timeout=10)
+        r.raise_for_status()
+        return r.json()["data"]["usage"]["current_month"]["credits_left"]
+
     def beginning(self):
+
         with open("api.txt", encoding="utf-8") as f:
             self.api_txt = f.readline()
 
         try:
+            self.ui.api_credit.setText(f"Your API credits left: {self.credits_left()}")
             self.btc_price = round(self.Coinmarket("BTC"),4)
             self.ton_price = round(self.Coinmarket("TON"),4)
             self.ui.resultBox.setText(f"BTC: {self.btc_price}\nTON: {self.ton_price}")
@@ -57,8 +68,10 @@ class Main:
             self.ui.resultBox.setText(f"Error: {e}")
 
     def on_run(self):
+
         USDT_Price_Now = float(self.ui.usdtEn.text())
         Crypto_User = float(self.ui.amountEn.text())
+
         if Crypto_User > 0:
             Symbol_User = self.ui.symbolEn.currentText()
 
