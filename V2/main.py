@@ -11,7 +11,13 @@ from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile, QTimer  # <-- اضافه شد
 
 today = date.today()
-
+'''
+برای افزودن کوین جدید خط‌های زیر نیاز به اصلاح دارند:
+self.ui.api_credit.setText(f"Your API credits left: {self.credits_left()}")
+self.ui.resultBox.setText(f"BTC: {self.btc_price}
+USDT_User = float(self.ui.usdBuyEn.text())
+User_Buy_Price = float(User_Value_Get) * float(User_Price_Get) * float(user_usdt_price)
+'''
 class Main:
     def __init__(self):
         loader = QUiLoader()
@@ -63,7 +69,15 @@ class Main:
             self.ui.api_credit.setText(f"Your API credits left: {self.credits_left()}")
             self.btc_price = round(self.Coinmarket("BTC"),4)
             self.ton_price = round(self.Coinmarket("TON"),4)
-            self.ui.resultBox.setText(f"BTC: {self.btc_price}\nTON: {self.ton_price}")
+            self.doge_price = round(self.Coinmarket("DOGE"), 4)
+            self.shib_price = self.Coinmarket("SHIB")
+
+            self.ui.resultBox.setText(
+                f"BTC: {self.btc_price} | "
+                f"TON: {self.ton_price} | "
+                f"Doge: {self.doge_price} | "
+                f"SHIB: {self.shib_price:.9f}"
+            )
         except Exception as e:
             self.ui.resultBox.setText(f"Error: {e}")
 
@@ -78,8 +92,12 @@ class Main:
             USDT_User = float(self.ui.usdBuyEn.text())
             if Symbol_User == "BTC":
                 Crypto_User_Price = self.btc_price
-            if Symbol_User == "TON":
+            elif Symbol_User == "TON":
                 Crypto_User_Price = self.ton_price
+            elif Symbol_User == "DOGE":
+                Crypto_User_Price = self.doge_price
+            elif Symbol_User == "SHIB":
+                Crypto_User_Price = self.shib_price
 
         file_path = "prices.csv"
         # 1) اگر فایل وجود داشته باشه True میشه
@@ -121,8 +139,13 @@ class Main:
 
                     if user_symbol_Get == "BTC":
                         Crypto_Price_Target = self.btc_price  # <-- اصلاح شد
-                    if user_symbol_Get == "TON":
+                    elif user_symbol_Get == "TON":
                         Crypto_Price_Target = self.ton_price
+                    elif user_symbol_Get == "DOGE":
+                        Crypto_Price_Target = self.doge_price
+                    elif user_symbol_Get == "SHIB":
+                        Crypto_Price_Target = self.shib_price
+
 
                     Price_Now = float(User_Value_Get) * float(Crypto_Price_Target) * float(USDT_Price_Now)
 
